@@ -3,7 +3,7 @@ def prompt(msg)
 end
 
 def valid_number?(n)
-  input.to_i.to_s == n || input.to_f.to_s == n
+  n.to_i.to_s == n || n.to_f.to_s == n
 end
 
 def operation_to_message(op)
