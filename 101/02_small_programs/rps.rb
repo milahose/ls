@@ -1,24 +1,9 @@
 VALID_CHOICES = {
-  rock: {
-    beats: ['scissors', 'lizard'],
-    loses_to: ['paper', 'spock']
-  },
-  paper: {
-    beats: ['spock', 'rock'],
-    loses_to: ['scissors', 'lizard']
-  },
-  scissors: {
-    beats: ['paper', 'lizard'],
-    loses_to: ['spock', 'rock']
-  },
-  spock: {
-    beats: ['rock', 'scissors'],
-    loses_to: ['lizard', 'paper']
-  },
-  lizard: {
-    beats: ['spock', 'paper'],
-    loses_to: ['rock', 'scissors']
-  }
+  rock: { beats: ['scissors', 'lizard'] },
+  paper: { beats: ['spock', 'rock'] },
+  scissors: { beats: ['paper', 'lizard'] },
+  spock: { beats: ['rock', 'scissors'] },
+  lizard: { beats: ['spock', 'paper'] }
 }
 
 def prompt(msg)
@@ -26,7 +11,22 @@ def prompt(msg)
 end
 
 def win?(first, second)
-  VALID_CHOICES[first.to_sym][:beats].include? second
+  VALID_CHOICES[first.to_sym][:beats].include?(second)
+end
+
+def num_to_hash_key(choice)
+  case choice
+  when 1
+    'rock'
+  when 2
+    'paper'
+  when 3
+    'paper'
+  when 4
+    'scissors'
+  when 5
+    'lizard'
+  end
 end
 
 prompt('Welcome to Rock, Paper, Scissors, Spock, Lizard!')
@@ -35,7 +35,7 @@ loop do
   computer_score = 0
   player_score = 0
   game_round = 1
-  
+
   match = ''
   loop do
     prompt('Would you like to start a match? (y/n)')
@@ -55,10 +55,11 @@ loop do
   loop do
     choice = ''
     loop do
-      prompt("Choose one: #{VALID_CHOICES.keys.join(', ')}")
+      prompt('Choose one: 1) rock 2) paper 3) scissors 4) spock 5) lizard')
       choice = gets.chomp
 
-      if VALID_CHOICES.keys.include?(choice.to_sym)
+      if [1, 2, 3, 4, 5].include?(choice.to_i)
+        choice = num_to_hash_key(choice.to_i)
         break
       else
         prompt('That\'s not a valid choice.')
@@ -80,8 +81,8 @@ loop do
     end
 
     prompt('The final score is:') if game_round == 5
-    game_round += 1
     prompt("Player: #{player_score}. Computer: #{computer_score}.")
+    game_round += 1
 
     break unless game_round <= 5 && match == true
   end
