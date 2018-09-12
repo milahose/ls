@@ -29,33 +29,62 @@ def win?(first, second)
   VALID_CHOICES[first.to_sym][:beats].include? second
 end
 
-def display_results(player, computer)
-  if win?(player, computer)
-    prompt('You won!')
-  elsif win?(computer, player)
-    prompt('The computer won!')
-  else
-    prompt('It was a tie!')
-  end
-end
+prompt('Welcome to Rock, Paper, Scissors, Spock, Lizard!')
 
 loop do
-  choice = ''
+  computer_score = 0
+  player_score = 0
+  game_round = 1
+  
+  match = ''
   loop do
-    prompt("Choose one: #{VALID_CHOICES.keys.join(', ')}")
-    choice = gets.chomp
+    prompt('Would you like to start a match? (y/n)')
+    match = gets.chomp
 
-    if VALID_CHOICES.keys.include?(choice.to_sym)
+    if match.downcase.start_with?('y')
+      match = true
+      break
+    elsif match.downcase.start_with?('n')
+      match = false
       break
     else
       prompt('That\'s not a valid choice.')
     end
   end
 
-  computer_choice = VALID_CHOICES.keys.sample.to_s
+  loop do
+    choice = ''
+    loop do
+      prompt("Choose one: #{VALID_CHOICES.keys.join(', ')}")
+      choice = gets.chomp
 
-  prompt("You chose: #{choice}. The computer chose: #{computer_choice}")
-  display_results(choice, computer_choice)
+      if VALID_CHOICES.keys.include?(choice.to_sym)
+        break
+      else
+        prompt('That\'s not a valid choice.')
+      end
+    end
+
+    computer_choice = VALID_CHOICES.keys.sample.to_s
+
+    prompt("You chose: #{choice}. The computer chose: #{computer_choice}")
+
+    if win?(choice, computer_choice)
+      player_score += 1
+      prompt('You won!')
+    elsif win?(computer_choice, choice)
+      computer_score += 1
+      prompt('The computer won!')
+    else
+      prompt('It was a tie!')
+    end
+
+    prompt('The final score is:') if game_round == 5
+    game_round += 1
+    prompt("Player: #{player_score}. Computer: #{computer_score}.")
+
+    break unless game_round <= 5 && match == true
+  end
 
   prompt('Do you want to play again?')
   answer = gets.chomp
