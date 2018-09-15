@@ -1,9 +1,9 @@
 VALID_CHOICES = {
-  rock: { beats: ['scissors', 'lizard'], id: 1 },
-  paper: { beats: ['spock', 'rock'], id: 2 },
-  scissors: { beats: ['paper', 'lizard'], id: 3 },
-  spock: { beats: ['rock', 'scissors'], id: 4 },
-  lizard: { beats: ['spock', 'paper'], id: 5 }
+  rock: { beats: %w(scissors lizard), id: 1 },
+  paper: { beats: %w(spock rock), id: 2 },
+  scissors: { beats: %w(paper lizard), id: 3 },
+  spock: { beats: %w(rock scissors), id: 4 },
+  lizard: { beats: %w(spock paper), id: 5 }
 }
 
 def prompt(msg)
