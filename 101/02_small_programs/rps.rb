@@ -1,9 +1,12 @@
-VALID_CHOICES = {
-  rock: { beats: ['scissors', 'lizard'] },
-  paper: { beats: ['spock', 'rock'] },
-  scissors: { beats: ['paper', 'lizard'] },
-  spock: { beats: ['rock', 'scissors'] },
-  lizard: { beats: ['spock', 'paper'] }
+GAME_LOGIC = {
+  valid_choices: {
+    rock: { beats: ['scissors', 'lizard'], id: 1 },
+    paper: { beats: ['spock', 'rock'], id: 2 },
+    scissors: { beats: ['paper', 'lizard'], id: 3 },
+    spock: { beats: ['rock', 'scissors'], id: 4 },
+    lizard: { beats: ['spock', 'paper'], id: 5 }
+  },
+  round_choice: nil
 }
 
 def prompt(msg)
@@ -11,69 +14,81 @@ def prompt(msg)
 end
 
 def win?(first, second)
-  VALID_CHOICES[first.to_sym][:beats].include?(second)
+  GAME_LOGIC[:valid_choices][first.to_sym][:beats].include?(second)
 end
 
-def num_to_hash_key(choice)
-  case choice
-  when 1
-    'rock'
-  when 2
-    'paper'
-  when 3
-    'paper'
-  when 4
-    'scissors'
-  when 5
-    'lizard'
+def valid?(choice)
+  GAME_LOGIC[:valid_choices].each do |key, val|
+    if choice.to_i == val[:id] || choice == key.to_s
+      GAME_LOGIC[:round_choice] = key.to_s
+      return true
+    end
+  end
+  false
+end
+
+def start_a_match?
+  loop do
+    prompt('Would you like to start a match (best of 5 wins)? (y/n)')
+    match = gets.chomp
+
+    if match.downcase.start_with?('y')
+      return true
+    elsif match.downcase.start_with?('n')
+      return false
+    else
+      prompt('That\'s not a valid choice.')
+    end
   end
 end
 
+def determine_player_choice
+  loop do
+    prompt('-----------------------------------------------------------')
+    prompt('Choose one: 1) rock 2) paper 3) scissors 4) spock 5) lizard')
+    prompt('-----------------------------------------------------------')
+    player_choice = gets.chomp
+
+    if valid?(player_choice)
+      return GAME_LOGIC[:round_choice]
+    else
+      prompt('That\'s not a valid choice.')
+    end
+  end
+end
+
+def display_player_choices(player, computer)
+  prompt("You chose: #{player}. The computer chose: #{computer}")
+end
+
+def clear_screen
+  system('clear') || system('cls')
+end
+
+prompt('------------------------------------------------')
 prompt('Welcome to Rock, Paper, Scissors, Spock, Lizard!')
+prompt("------------------------------------------------")
 
 loop do
   computer_score = 0
   player_score = 0
   game_round = 1
-
-  match = ''
-  loop do
-    prompt('Would you like to start a match? (y/n)')
-    match = gets.chomp
-
-    if match.downcase.start_with?('y')
-      match = true
-      break
-    elsif match.downcase.start_with?('n')
-      match = false
-      break
-    else
-      prompt('That\'s not a valid choice.')
-    end
-  end
+  match = start_a_match?
+  clear_screen
 
   loop do
-    choice = ''
-    loop do
-      prompt('Choose one: 1) rock 2) paper 3) scissors 4) spock 5) lizard')
-      choice = gets.chomp
+    prompt("ROUND: #{game_round}")
 
-      if [1, 2, 3, 4, 5].include?(choice.to_i)
-        choice = num_to_hash_key(choice.to_i)
-        break
-      else
-        prompt('That\'s not a valid choice.')
-      end
-    end
+    player_choice = determine_player_choice
+    clear_screen
+    computer_choice = GAME_LOGIC[:valid_choices].keys.sample.to_s
 
-    computer_choice = VALID_CHOICES.keys.sample.to_s
+    display_player_choices(player_choice, computer_choice)
 
-    prompt("You chose: #{choice}. The computer chose: #{computer_choice}")
-
-    if win?(choice, computer_choice)
+    if win?(player_choice, computer_choice)
       player_score += 1
       prompt('You won!')
-    elsif win?(computer_choice, choice)
+    elsif win?(computer_choice, player_choice)
       computer_score += 1
       prompt('The computer won!')
     else
@@ -84,7 +99,10 @@ loop do
     prompt("Player: #{player_score}. Computer: #{computer_score}.")
     game_round += 1
 
-    break unless game_round <= 5 && match == true
+    sleep 4
+    clear_screen
+
+    break unless match && game_round <= 5
   end
 
   prompt('Do you want to play again?')
