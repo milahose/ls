@@ -1,4 +1,4 @@
-GAME_LOGIC = {
+VALID_CHOICES = {
   rock: { beats: ['scissors', 'lizard'], id: 1 },
   paper: { beats: ['spock', 'rock'], id: 2 },
   scissors: { beats: ['paper', 'lizard'], id: 3 },
@@ -11,11 +11,11 @@ def prompt(msg)
 end
 
 def win?(first, second)
-  GAME_LOGIC[first.to_sym][:beats].include?(second)
+  VALID_CHOICES[first.to_sym][:beats].include?(second)
 end
 
 def valid?(choice)
-  GAME_LOGIC.each do |key, val|
+  VALID_CHOICES.each do |key, val|
     if choice.to_i == val[:id] || choice == key.to_s
       return true
     end
@@ -24,7 +24,7 @@ def valid?(choice)
 end
 
 def decipher(choice)
-  GAME_LOGIC.each do |key, val|
+  VALID_CHOICES.each do |key, val|
     if choice.to_i == val[:id] || choice == key.to_s
       return key.to_s
     end
@@ -36,9 +36,9 @@ def start_a_match?
     prompt('Would you like to start a match? (Best of 5 wins) (y/n)')
     match = gets.chomp
 
-    if match.downcase.start_with?('y')
+    if %w(y yes).include?(match.downcase)
       return true
-    elsif match.downcase.start_with?('n')
+    elsif %w(n no).include?(match.downcase)
       return false
     else
       prompt('That\'s not a valid choice.')
@@ -81,10 +81,10 @@ loop do
   clear_screen
 
   loop do
-    prompt("ROUND: #{game_round}")
+    prompt("ROUND: #{game_round}") if match
 
     player_choice = determine_player_choice
-    computer_choice = GAME_LOGIC.keys.sample.to_s
+    computer_choice = VALID_CHOICES.keys.sample.to_s
     clear_screen
     display_player_choices(player_choice, computer_choice)
 
@@ -111,7 +111,7 @@ loop do
   prompt('Do you want to play again?')
   answer = gets.chomp
 
-  break unless answer.downcase.start_with?('y')
+  break unless %w(y yes).include?(answer.downcase)
 end
 
 prompt('Thank you for playing Rock, Paper, Scissors, Spock, Lizard!')
