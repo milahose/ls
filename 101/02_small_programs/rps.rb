@@ -1,12 +1,9 @@
 GAME_LOGIC = {
-  valid_choices: {
-    rock: { beats: ['scissors', 'lizard'], id: 1 },
-    paper: { beats: ['spock', 'rock'], id: 2 },
-    scissors: { beats: ['paper', 'lizard'], id: 3 },
-    spock: { beats: ['rock', 'scissors'], id: 4 },
-    lizard: { beats: ['spock', 'paper'], id: 5 }
-  },
-  round_choice: nil
+  rock: { beats: ['scissors', 'lizard'], id: 1 },
+  paper: { beats: ['spock', 'rock'], id: 2 },
+  scissors: { beats: ['paper', 'lizard'], id: 3 },
+  spock: { beats: ['rock', 'scissors'], id: 4 },
+  lizard: { beats: ['spock', 'paper'], id: 5 }
 }
 
 def prompt(msg)
@@ -14,22 +11,29 @@ def prompt(msg)
 end
 
 def win?(first, second)
-  GAME_LOGIC[:valid_choices][first.to_sym][:beats].include?(second)
+  GAME_LOGIC[first.to_sym][:beats].include?(second)
 end
 
 def valid?(choice)
-  GAME_LOGIC[:valid_choices].each do |key, val|
+  GAME_LOGIC.each do |key, val|
     if choice.to_i == val[:id] || choice == key.to_s
-      GAME_LOGIC[:round_choice] = key.to_s
       return true
     end
   end
   false
 end
 
+def decipher(choice)
+  GAME_LOGIC.each do |key, val|
+    if choice.to_i == val[:id] || choice == key.to_s
+      return key.to_s
+    end
+  end
+end
+
 def start_a_match?
   loop do
-    prompt('Would you like to start a match (best of 5 wins)? (y/n)')
+    prompt('Would you like to start a match? (Best of 5 wins) (y/n)')
     match = gets.chomp
 
     if match.downcase.start_with?('y')
@@ -50,7 +54,7 @@ def determine_player_choice
     player_choice = gets.chomp
 
     if valid?(player_choice)
-      return GAME_LOGIC[:round_choice]
+      return decipher(player_choice)
     else
       prompt('That\'s not a valid choice.')
     end
@@ -80,9 +84,8 @@ loop do
     prompt("ROUND: #{game_round}")
 
     player_choice = determine_player_choice
+    computer_choice = GAME_LOGIC.keys.sample.to_s
     clear_screen
-    computer_choice = GAME_LOGIC[:valid_choices].keys.sample.to_s
-
     display_player_choices(player_choice, computer_choice)
 
     if win?(player_choice, computer_choice)
