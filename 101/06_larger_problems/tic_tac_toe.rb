@@ -33,9 +33,9 @@ end
 
 def update_board(choice, board)
   if choice.is_a?(String)
-    board[choice.to_i - 1] = 'X'
+    board[choice.to_i - 1] = PLAYER_IDENTITY
   else
-    board[choice - 1] = 'O'
+    board[choice - 1] = COMPUTER_IDENTITY
   end
 end
 
@@ -78,6 +78,9 @@ end
 
 def get_computer_choice(board)
   computer_choice = board.select { |e| e.to_i > 0 }.sample
+  clear_screen
+  prompt("Computer moving to spot #{computer_choice}...")
+  sleep 2
   update_board(computer_choice, board)
   computer_choice
 end
@@ -92,19 +95,19 @@ loop do
   board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   prompt('Would you like to be X or O?')
 
-  player_identity = validate_identity
-  computer_identity = player_identity == 'X' ? 'O' : 'X'
+  PLAYER_IDENTITY = validate_identity
+  COMPUTER_IDENTITY = PLAYER_IDENTITY == 'X' ? 'O' : 'X'
   clear_screen
 
-  prompt("Player will be #{player_identity}.")
-  prompt("Computer will be #{computer_identity}.")
+  prompt("Player will be #{PLAYER_IDENTITY}.")
+  prompt("Computer will be #{COMPUTER_IDENTITY}.")
 
   sleep 2.5
   clear_screen
 
   loop do
     get_player_choice(board)
-    if winning_move?(player_identity, board)
+    if winning_move?(PLAYER_IDENTITY, board)
       clear_screen
       prompt('You won!')
       display_board(board)
@@ -113,7 +116,7 @@ loop do
     end
 
     get_computer_choice(board)
-    if winning_move?(computer_identity, board)
+    if winning_move?(COMPUTER_IDENTITY, board)
       clear_screen
       prompt('Uh oh, the computer won. Better luck next time!')
       display_board(board)
