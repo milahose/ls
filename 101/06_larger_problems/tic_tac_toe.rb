@@ -115,19 +115,19 @@ loop do
       break
     end
 
+    if board_full?(board)
+      prompt('It is a tie game!')
+      display_board(board)
+      sleep 3
+      break
+    end
+
     get_computer_choice(board)
     if winning_move?(COMPUTER_IDENTITY, board)
       clear_screen
       prompt('Uh oh, the computer won. Better luck next time!')
       display_board(board)
       sleep 4
-      break
-    end
-
-    if board_full?(board)
-      prompt('It is a tie game!')
-      display_board(board)
-      sleep 3
       break
     end
 
