@@ -1,4 +1,3 @@
-board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 WINNING_COMBOS = [
   [0, 3, 6],
   [1, 4, 7],
@@ -22,14 +21,10 @@ def display_board(board)
   puts " #{board[6]} | #{board[7]} | #{board[8]} "
 end
 
-def winner?(player, board)
+def winning_move?(player, board)
   WINNING_COMBOS.any? do |sub_arr|
     return true if sub_arr.all? { |i| board[i] == player }
   end
-end
-
-def tie_game?(player1, player2, board)
-  !winner?(player1, board) && !winner?(player2, board)
 end
 
 def board_full?(board)
@@ -40,7 +35,7 @@ def update_board(choice, board)
   if choice.is_a?(String)
     board[choice.to_i - 1] = 'X'
   else
-    board[choice] = 'O'
+    board[choice - 1] = 'O'
   end
 end
 
@@ -52,6 +47,16 @@ def valid_input?(choice, board)
   else
     false
   end
+end
+
+def validate_identity
+  player_identity = nil
+  loop do
+    player_identity = gets.chomp
+    break if player_identity.upcase == 'X' || player_identity.upcase == 'O'
+    prompt('Invalid choice. Please enter X or O.')
+  end
+  player_identity.upcase
 end
 
 def get_player_choice(board)
@@ -74,6 +79,7 @@ end
 def get_computer_choice(board)
   computer_choice = board.select { |e| e.to_i > 0 }.sample
   update_board(computer_choice, board)
+  computer_choice
 end
 
 def clear_screen
@@ -81,10 +87,61 @@ def clear_screen
 end
 
 prompt('Welcome to Tic-Tac-Toe!')
-prompt('Player is X. Computer is O.')
 
 loop do
-  get_player_choice(board)
-  get_computer_choice(board)
-  display_board(board)
+  board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  prompt('Would you like to be X or O?')
+
+  player_identity = validate_identity
+  computer_identity = player_identity == 'X' ? 'O' : 'X'
+  clear_screen
+
+  prompt("Player will be #{player_identity}.")
+  prompt("Computer will be #{computer_identity}.")
+
+  sleep 2.5
+  clear_screen
+
+  loop do
+    get_player_choice(board)
+    if winning_move?(player_identity, board)
+      clear_screen
+      prompt('You won!')
+      display_board(board)
+      sleep 3
+      break
+    end
+
+    get_computer_choice(board)
+    if winning_move?(computer_identity, board)
+      clear_screen
+      prompt('Uh oh, the computer won. Better luck next time!')
+      display_board(board)
+      sleep 4
+      break
+    end
+
+    if board_full?(board)
+      prompt('It is a tie game!')
+      display_board(board)
+      sleep 3
+      break
+    end
+
+    clear_screen
+  end
+
+  clear_screen
+  prompt('Would you like to play again? (y/n)')
+  answer = gets.chomp
+
+  break if ['n', 'no'].include?(answer.downcase)
+
+  if !%(y yes n no).include?(answer.downcase)
+    prompt('Invalid input. Please enter y/n to continue')
+  end
+  clear_screen
 end
+
+clear_screen
+prompt('Thank you for playing Tic-Tac-Toe! Goodbye.')
