@@ -44,12 +44,34 @@ def update_board(choice, board)
   end
 end
 
+def valid_input?(choice, board)
+  available_choices = board.select { |e| e.is_a?(Integer) }
+
+  if choice.to_i > 0 && available_choices.include?(choice.to_i)
+    true
+  else
+    false
+  end
+end
+
+def get_player_choice
+  loop do
+    prompt('Please choose a board position by entering the corresponding number:')
+    display_board(board)
+    player_choice = gets.chomp
+
+    return if valid_input?(player_choice)
+    prompt('Invalid input. Please select one of the following:')
+    prompt("#{board.select { |e| e.is_a?(Integer) }.join(', ')}")
+  end
+end
+
 
 prompt('Welcome to Tic-Tac-Toe!')
 prompt('Player is X. Computer is O.')
-prompt('Please choose a board position by entering the corresponding number:')
-display_board(board)
 
 loop do
+  get_player_choice
+
 
 end
