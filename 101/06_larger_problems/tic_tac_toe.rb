@@ -54,24 +54,37 @@ def valid_input?(choice, board)
   end
 end
 
-def get_player_choice
+def get_player_choice(board)
   loop do
-    prompt('Please choose a board position by entering the corresponding number:')
+    prompt('Please choose a board position by entering')
+    prompt('one of the corresponding numbers below.')
     display_board(board)
     player_choice = gets.chomp
 
-    return if valid_input?(player_choice)
-    prompt('Invalid input. Please select one of the following:')
-    prompt("#{board.select { |e| e.is_a?(Integer) }.join(', ')}")
+    if valid_input?(player_choice, board)
+      update_board(player_choice, board)
+      return player_choice
+    end
+
+    prompt('Invalid input. Please select one of the following positions:')
+    prompt(board.select { |e| e.is_a?(Integer) }.join(', '))
   end
 end
 
+def get_computer_choice(board)
+  computer_choice = board.select { |e| e.to_i > 0 }.sample
+  update_board(computer_choice, board)
+end
+
+def clear_screen
+  system('clear') || system('cls')
+end
 
 prompt('Welcome to Tic-Tac-Toe!')
 prompt('Player is X. Computer is O.')
 
 loop do
-  get_player_choice
-
-
+  get_player_choice(board)
+  get_computer_choice(board)
+  display_board(board)
 end
