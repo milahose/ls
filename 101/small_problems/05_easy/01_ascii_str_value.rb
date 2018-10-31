@@ -5,12 +5,12 @@
 def ascii_value(str)
   sum = 0
   str.each_char do |c|
-    puts s.ord
+    sum += c.ord
   end
+  sum
 end
 
-ascii_value('Four score')
-# ascii_value('Four score') == 984
-# ascii_value('Launch School') == 1251
-# ascii_value('a') == 97
-# ascii_value('') == 0
+puts ascii_value('Four score') == 984
+puts ascii_value('Launch School') == 1251
+puts ascii_value('a') == 97
+puts ascii_value('') == 0
