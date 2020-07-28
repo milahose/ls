@@ -8,22 +8,21 @@ end
 
 def operation_to_message(op)
   result = case op
-  when '1'
-    'Adding'
-  when '2'
-    'Subtracting'
-  when '3'
-    'Multiplying'
-  when '4'
-    'Dividing'
-  end
-
+           when '1'
+             'Adding'
+           when '2'
+             'Subtracting'
+           when '3'
+             'Multiplying'
+           when '4'
+             'Dividng'
+           end
   result
 end
 
-def get_number(nthNum)
+def get_number(nth_num)
   loop do
-    prompt("Please enter the #{nthNum} number:")
+    prompt("Please enter the #{nth_num} number:")
     n = gets.chomp
 
     if valid_number?(n)
@@ -32,7 +31,6 @@ def get_number(nthNum)
       prompt('Hmm... that doesn\'t look like a valid number')
     end
   end
-  
   n
 end
 
@@ -53,11 +51,8 @@ end
 prompt("Hi #{name}!")
 
 loop do
-  n1 = nil
-  n2 = nil
-
-  n1 = get_number('first');
-  n2 = get_number('second');
+  n1 = get_number('first')
+  n2 = get_number('second')
 
   operator_prompt = <<-MSG
     What type of operation would you like to perform?
