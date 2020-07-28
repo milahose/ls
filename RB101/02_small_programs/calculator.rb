@@ -21,21 +21,6 @@ def operation_to_message(op)
   result
 end
 
-def get_number(nthNum)
-  loop do
-    prompt("Please enter the #{nthNum} number:")
-    n = gets.chomp
-
-    if valid_number?(n)
-      break
-    else
-      prompt('Hmm... that doesn\'t look like a valid number')
-    end
-  end
-  
-  n
-end
-
 prompt('Welcome to Calculator! Enter your name:')
 name = ''
 
@@ -56,8 +41,27 @@ loop do
   n1 = nil
   n2 = nil
 
-  n1 = get_number('first');
-  n2 = get_number('second');
+  loop do
+    prompt('Please enter the first number:')
+    n1 = gets.chomp
+
+    if valid_number?(n1)
+      break
+    else
+      prompt('Hmm... that doesn\'t look like a valid number')
+    end
+  end
+
+  loop do
+    prompt('Please enter the second number:')
+    n2 = gets.chomp
+
+    if valid_number?(n2)
+      break
+    else
+      prompt('Hmm... that doesn\'t look like a valid number')
+    end
+  end
 
   operator_prompt = <<-MSG
     What type of operation would you like to perform?
