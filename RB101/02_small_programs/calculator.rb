@@ -2,8 +2,16 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
+def integer?(input)
+  /^-?\d+$/.match(input)
+end
+
+def float?(input)
+  /\d/.match(input) && /^-?\d*\.?\d*$/.match(input)
+end
+
 def valid_number?(n)
-  n.to_i.to_s == n || n.to_f.to_s == n
+  integer?(n) || float?(n)
 end
 
 def operation_to_message(op)
@@ -21,6 +29,7 @@ def operation_to_message(op)
 end
 
 def get_number(nth_num)
+  n = ''
   loop do
     prompt("Please enter the #{nth_num} number:")
     n = gets.chomp
