@@ -1,5 +1,5 @@
 def prompt(msg)
-  puts "=> #{msg}"
+  print "=> #{msg}"
 end
 
 def integer?(input)
@@ -31,7 +31,7 @@ end
 def get_number(nth_num)
   n = ''
   loop do
-    prompt("Please enter the #{nth_num} number:")
+    prompt("Please enter the #{nth_num} number: ")
     n = gets.chomp
 
     if valid_number?(n)
@@ -43,7 +43,7 @@ def get_number(nth_num)
   n
 end
 
-prompt('Welcome to Calculator! Enter your name:')
+prompt('Welcome to Calculator! Enter your name: ')
 name = ''
 
 loop do
@@ -57,19 +57,17 @@ loop do
   end
 end
 
-prompt("Hi #{name}!")
+prompt("Hi #{name}!\n")
 
 loop do
   n1 = get_number('first')
   n2 = get_number('second')
 
-  operator_prompt = <<-MSG
-    What type of operation would you like to perform?
-      1) add
-      2) subtract
-      3) multiply
-      4) divide
-  MSG
+  operator_prompt = "What type of operation would you like to perform?\n" \
+                    "   1) add\n" \
+                    "   2) subtract\n" \
+                    "   3) multiply\n" \
+                    "   4) divide\n"
 
   prompt(operator_prompt)
   operator = ''
@@ -84,7 +82,7 @@ loop do
     end
   end
 
-  prompt("#{operation_to_message(operator)} the two numbers...")
+  prompt("#{operation_to_message(operator)} the two numbers...\n")
 
   result = case operator
            when '1'
@@ -97,11 +95,11 @@ loop do
              n1.to_f / n2.to_f
            end
 
-  prompt("The result is #{result}")
-  prompt('Do you want to perform another calculation? (y/n)')
+  prompt("The result is #{result}.\n")
+  prompt('Do you want to perform another calculation? (y/n): ')
   answer = gets.chomp
 
   break unless answer.downcase.start_with?('y')
 end
 
-prompt('Thank you for using the calculator. Goodbye!')
+prompt("Thank you for using the calculator. Goodbye!\n")
