@@ -14,22 +14,52 @@ def valid_number?(n)
   integer?(n) || float?(n)
 end
 
+def get_loan_value(value_description)
+  val = ''
+  loop do
+    prompt "Please enter the #{value_description}"
+    val = gets.chomp
 
+    if valid_number?(val)
+      break
+    else
+      prompt "Hmm... that doesn\'t look like a valid input\n"
+    end
+  end
+  val
+end
+
+def format_number(n)
+  n = n.round(2)
+  change = (n % 10).round(2)
+  n_str = n.to_i.to_s
+
+  count = n_str.length - 1
+  while count >= 2
+    count -= 2
+    n_str = n_str.insert(count, ',')
+  end
+
+  n_str + change.to_s.slice(1, 3)
+end
+
+prompt "Welcome to the Calculator App!\n"
 
 loop do
-  prompt "Please enter the loan amount in dollars: $"
-  loan_amount = gets.chomp.to_i
-
-  prompt "Please enter the Annual Percentage Rate (APR) as a whole number: "
-  interest_rate = gets.chomp.to_f
-
-  prompt "Please enter the loan duration in years: "
-  loan_duration = gets.chomp.to_i
+  loan_amount = get_loan_value("loan amount in dollars: $").to_i
+  interest_rate = get_loan_value("Annual Percentage Rate (APR) as a whole number: ").to_f
+  loan_duration = get_loan_value("loan loan duration in years: ").to_i
 
   loan_duration_in_months = loan_duration * 12
   monthly_interest_rate = (interest_rate / loan_duration_in_months) * 0.1
 
   monthly_payment = loan_amount * (monthly_interest_rate / (1 - (1 + monthly_interest_rate)**(-loan_duration_in_months)))
 
-  puts "Your monthly payment is: $#{monthly_payment.round(2)}."
+  prompt "Your monthly payment is: $#{format_number(monthly_payment)}.\n"
+  prompt 'Would you like to perform another calculation? (y/n): '
+  repeat = gets.chomp.downcase
+  
+  break unless repeat.start_with? 'y'
 end
+
+prompt "Goodbye!\n"
