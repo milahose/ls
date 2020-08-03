@@ -11,7 +11,7 @@ def float?(input)
 end
 
 def valid_number?(n)
-  integer?(n) || float?(n)
+  (integer?(n) || float?(n)) && n > 0
 end
 
 def get_loan_value(value_description)
