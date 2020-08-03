@@ -47,18 +47,21 @@ prompt "Welcome to the Calculator App!\n"
 
 loop do
   loan_amount = get_loan_value("loan amount in dollars: $").to_i
-  interest_rate = get_loan_value("Annual Percentage Rate (APR) as a whole number: ").to_f
+  interest_rate = get_loan_value(
+    "Annual Percentage Rate (APR) as a whole number: "
+  ).to_f
   loan_duration = get_loan_value("loan loan duration in years: ").to_i
 
   loan_duration_in_months = loan_duration * 12
   monthly_interest_rate = (interest_rate / loan_duration_in_months) * 0.1
 
-  monthly_payment = loan_amount * (monthly_interest_rate / (1 - (1 + monthly_interest_rate)**(-loan_duration_in_months)))
+  divisor = (1 - (1 + monthly_interest_rate)**(-loan_duration_in_months))
+  monthly_payment = loan_amount * (monthly_interest_rate / divisor)
 
   prompt "Your monthly payment is: $#{format_number(monthly_payment)}.\n"
   prompt 'Would you like to perform another calculation? (y/n): '
   repeat = gets.chomp.downcase
-  
+
   break unless repeat.start_with? 'y'
 end
 
